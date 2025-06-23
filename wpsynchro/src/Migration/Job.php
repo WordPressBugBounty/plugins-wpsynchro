@@ -104,7 +104,7 @@ class Job
     public $db_search_replaces = [];
     public $db_first_run_setup = false;                 // Whether first run is completed, which is mostly create the temporary tables before transfer
     public $db_response_size_wanted_default = 125000;   // Default response size we go with
-    public $db_response_size_wanted_max = 2500000;      // Can max scale to X mb, to prevent all sorts of trouble with memory and other stuff
+    public $db_response_size_wanted_max = 1000000;      // Can max scale to X mb, to prevent all sorts of trouble with memory and other stuff
     public $db_throttle_table = "";                     // Current table we are doing
     public $db_throttle_table_response_size = 0;        // Current table we are doing max request size
     public $db_last_response_length = 0;                // Response size for last request

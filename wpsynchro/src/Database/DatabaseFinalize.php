@@ -401,8 +401,9 @@ class DatabaseFinalize
 
             if (!$found) {
                 // Not found in correct case, now check for case insensitive
+                $found_case_insensitive = false;
+                $found_table_case = "";
                 foreach ($tables_on_target as $targettable) {
-                    $found_case_insensitive = false;
                     $found_table_case = $targettable->name;
                     if (strcasecmp($checktablename, $targettable->name) == 0) {
                         $found_case_insensitive = true;

@@ -1,9 +1,13 @@
+= 1.13.0 =
+ * Bugfix: Optimize the handling of database queries, which no longer has the same tendency to cause sort buffer errors in certain conditions
+ * Bugfix: When verifying migrations, give better debug information when it fails, instead of a generic JS message
+
 = 1.12.0 =
- * Improvement: Extend cron scheduling system, so migrations can be run with intervals automatically without user intervention and without WP CLI
+ * Improvement: Extend cron scheduling system, so migrations can be run at intervals automatically without user intervention and without WP CLI
  * Improvement: Prevent unwanted background update from PRO version to FREE version for some users
  * Improvement: Make it possible to only delete a single log from the "Logs" menu, instead of all or nothing
  * Improvement: Make it possible to download the database backup from a pull migration in "Logs" menu
- * Bugfix: No longer use ini_restore() native php function, because some hosting does not allow it
+ * Bugfix: No longer use ini_restore() native PHP function, because some hosting does not allow it
 
 = 1.11.5 =
  * Bugfix: Fix links for usage reporting dialog, leading to a non-existing page
@@ -16,11 +20,11 @@
  * Bugfix: Fix some issues causing menu to generate PHP deprecation issues, even though it just triggered it in WP core functions
 
 = 1.11.3 =
- * Change: Change all service urls from wpsynchro.com to daev.tech, as we have moved the plugin there
- * Bugfix: Fixed a minor csrf issue reported by Patchstack - Not a risk to be worried about.
+ * Change: Change all service URLs from wpsynchro.com to daev.tech, as we have moved the plugin there
+ * Bugfix: Fixed a minor CSRF issue reported by Patchstack - Not a risk to be worried about.
 
 = 1.11.2 =
- * Bugfix: Fix PHP timeout issue caused by serialized data, kinda like 1.11.1 hotfix, but caused by another data.
+ * Bugfix: Fix PHP timeout issue caused by serialized data, kind of like 1.11.1 hotfix, but caused by other data.
  * Improvement: Added more safety against timeout issues in serialized data, so it wont happen again
 
 = 1.11.1 =

@@ -84,33 +84,26 @@ class DatabaseHelperFunctions
         $data = [];
         $has_more_rows_in_table = true;
         $errors = [];
-
         $current_response_size = 0;
         $is_using_primary_key = strlen($primary_key_column) > 0;
         $start_time = microtime(true);
 
-        // Generate the template sql
-        $column_parts = [];
-        foreach ($column_names as $column_name) {
-            $column_parts[] = 'char_length(`' . $column_name . '`)';
-        }
-        $sql_template = "SELECT t1.*, @total:= @total + (" . implode('+', $column_parts) . ") AS wpsynchro_rowlength FROM (%s) AS t1 JOIN (SELECT @total:=0) AS r WHERE @total < %d";
-
         while ($current_response_size < $max_response_size) {
-            $remaining_space = $max_response_size - $current_response_size;
-            // Get data
+            $rows_to_fetch = $default_rows_per_request;
+
             if ($is_using_primary_key) {
-                $sql_stmt = 'SELECT * FROM `' . $table . '` WHERE `' . $primary_key_column . '` > ' . $last_primary_key . ' ORDER BY `' . $primary_key_column . '` ASC LIMIT ' . intval($default_rows_per_request);
-                $sql_stmt = sprintf($sql_template, $sql_stmt, $remaining_space);
-                $sql_stmt .= ' ORDER BY `' . $primary_key_column . '` ASC';
+                $sql_stmt = $wpdb->prepare(
+                    "SELECT * FROM `$table` WHERE `$primary_key_column` > %s ORDER BY `$primary_key_column` ASC LIMIT %d",
+                    $last_primary_key,
+                    $rows_to_fetch
+                );
             } else {
-                $order_by = ' ORDER BY `' . implode('`,`', $column_names) . '` ' ;
-                $sql_stmt = 'SELECT * FROM `' . $table . '` ' . $order_by . ' LIMIT ' . $completed_rows . ',' . intval($default_rows_per_request);
-                $sql_stmt = sprintf($sql_template, $sql_stmt, $remaining_space);
-                $sql_stmt .= $order_by;
+                $sql_stmt = "SELECT * FROM `$table` LIMIT $completed_rows, $rows_to_fetch";
             }
+
             $sql_result = $wpdb->get_results($sql_stmt);
-            if (strlen($wpdb->last_error) > 0) {
+
+            if (!empty($wpdb->last_error)) {
                 $errors[] = $wpdb->last_error;
                 $wpdb->last_error = '';
             }
@@ -121,27 +114,51 @@ class DatabaseHelperFunctions
             }
 
             foreach ($sql_result as $data_row) {
-                unset($data_row->wpsynchro_rowlength);
-                foreach ($data_row as $data_row_col) {
-                    if ($data_row_col !== null) {
-                        $current_response_size += strlen($data_row_col);
+                // Estimate row size in PHP
+                $row_size = 0;
+                foreach ($column_names as $col) {
+                    if (isset($data_row->$col) && $data_row->$col !== null) {
+                        $row_size += strlen((string)$data_row->$col);
                     }
                 }
+
+                // Always include the first row, even if it exceeds the max_response_size
+                if (empty($data)) {
+                    $current_response_size += $row_size;
+                    if ($is_using_primary_key) {
+                        $last_primary_key = $data_row->$primary_key_column;
+                    } else {
+                        $completed_rows += 1;
+                    }
+                    $data[] = $data_row;
+                    continue;
+                }
+
+                // For subsequent rows, check if adding would exceed the max_response_size
+                if ($current_response_size + $row_size > $max_response_size) {
+                    $has_more_rows_in_table = true;
+                    break 2; // Stop fetching more rows
+                }
+
+                $current_response_size += $row_size;
+
                 if ($is_using_primary_key) {
                     $last_primary_key = $data_row->$primary_key_column;
                 } else {
                     $completed_rows += 1;
                 }
+
                 $data[] = $data_row;
-                if ($current_response_size > $max_response_size) {
-                    break;
-                }
             }
 
-            // Check if we passed time limit
-            $current_time = \microtime(true);
-            $time_spent = $current_time - $start_time;
-            if ($time_spent > $time_limit_in_seconds) {
+            // Check time limit
+            if ((microtime(true) - $start_time) > $time_limit_in_seconds) {
+                break;
+            }
+
+            // If less than requested rows returned, no more data
+            if (count($sql_result) < $rows_to_fetch) {
+                $has_more_rows_in_table = false;
                 break;
             }
         }
