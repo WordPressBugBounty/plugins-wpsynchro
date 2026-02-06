@@ -1,3 +1,7 @@
+= 1.14.0 =
+ * Bugfix: Fix a minor translation loading timing, where the plugin updater would use translation before it was loaded
+ * Change: Bump supported WP up to 6.9
+
 = 1.13.0 =
  * Bugfix: Optimize the handling of database queries, which no longer has the same tendency to cause sort buffer errors in certain conditions
  * Bugfix: When verifying migrations, give better debug information when it fails, instead of a generic JS message

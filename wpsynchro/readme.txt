@@ -1,10 +1,10 @@
-=== WP Synchro – WordPress Migration, Clone, Backup & Sync Plugin ===
+=== WP Synchro – The Ultimate WordPress Migration Tool ===
 Contributors: wpsynchro
 Donate link: https://daev.tech/wpsynchro/?utm_source=wordpress.org&utm_medium=referral&utm_campaign=donate
 Tags: migrate, clone, files, database, migration, backup, sync, staging, development, wordpress migration, site migration, move wordpress, transfer wordpress
 Requires at least: 5.8
-Tested up to: 6.8
-Stable tag: 1.13.0
+Tested up to: 6.9
+Stable tag: 1.14.0
 Requires PHP: 7.2
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0
@@ -105,6 +105,10 @@ Contact us at <support@daev.tech>.
 For detailed documentation and support, visit [WP Synchro Documentation](https://daev.tech/wpsynchro/docs).
 
 == Changelog ==
+
+= 1.14.0 =
+ * Bugfix: Fix a minor translation loading timing, where the plugin updater would use translation before it was loaded
+ * Change: Bump supported WP up to 6.9
 
 = 1.13.0 =
  * Bugfix: Optimize the handling of database queries, which no longer has the same tendency to cause sort buffer errors in certain conditions

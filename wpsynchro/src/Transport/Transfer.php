@@ -24,6 +24,8 @@ class Transfer
     {
         $this->boundary = "----" . bin2hex(openssl_random_pseudo_bytes(16));
         $this->dataobject = new \stdClass();
+        $this->dataobject->files = [];
+        $this->dataobject->max_file_size = 0;
     }
 
     public function setDataObject($object)

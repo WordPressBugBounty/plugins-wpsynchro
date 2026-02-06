@@ -1,22 +1,22 @@
 <?php return array(
     'root' => array(
+        'name' => 'daev/wpsynchro',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
+        'reference' => '3dd0db8b2312d0fa3021f2b54cc4bf9657b53d94',
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '56402463a3e15a06e68773474ffe391a9e9bb7dd',
-        'name' => 'daev/wpsynchro',
         'dev' => false,
     ),
     'versions' => array(
         'daev/wpsynchro' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
+            'reference' => '3dd0db8b2312d0fa3021f2b54cc4bf9657b53d94',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '56402463a3e15a06e68773474ffe391a9e9bb7dd',
             'dev_requirement' => false,
         ),
     ),

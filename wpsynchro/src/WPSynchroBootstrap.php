@@ -98,7 +98,7 @@ class WPSynchroBootstrap
     private function loadAPI()
     {
         add_action(
-            'plugins_loaded',
+            'init',
             function () {
                 $load_api = new LoadAPI();
                 $load_api->setup();

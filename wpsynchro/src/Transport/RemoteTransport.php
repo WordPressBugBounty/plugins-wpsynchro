@@ -42,7 +42,7 @@ class RemoteTransport implements RemoteConnection
     /**
      *  Set request destination
      */
-    public function setDestination(Destination $destination = null)
+    public function setDestination(?Destination $destination = null)
     {
         if (is_object($destination)) {
             $this->destination = $destination;
@@ -52,7 +52,7 @@ class RemoteTransport implements RemoteConnection
     /**
      *  Set Job
      */
-    public function setJob(Job $job = null)
+    public function setJob(?Job $job = null)
     {
         if (is_object($job)) {
             $this->job = $job;

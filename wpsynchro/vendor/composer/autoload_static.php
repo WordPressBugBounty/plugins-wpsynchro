@@ -4,17 +4,17 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit49b264586541222a2dac09bc2612c9aa
+class ComposerStaticInit9bb9ff4a2e490cc8fad84a2d1a0be8fc
 {
     public static $prefixLengthsPsr4 = array (
-        'W' => 
+        'W' =>
         array (
             'WPSynchro\\' => 10,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'WPSynchro\\' => 
+        'WPSynchro\\' =>
         array (
             0 => __DIR__ . '/../..' . '/src',
         ),
@@ -138,9 +138,9 @@ class ComposerStaticInit49b264586541222a2dac09bc2612c9aa
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit49b264586541222a2dac09bc2612c9aa::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit49b264586541222a2dac09bc2612c9aa::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit49b264586541222a2dac09bc2612c9aa::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit9bb9ff4a2e490cc8fad84a2d1a0be8fc::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit9bb9ff4a2e490cc8fad84a2d1a0be8fc::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit9bb9ff4a2e490cc8fad84a2d1a0be8fc::$classMap;
 
         }, null, ClassLoader::class);
     }
