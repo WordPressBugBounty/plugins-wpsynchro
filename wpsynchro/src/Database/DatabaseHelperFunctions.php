@@ -7,6 +7,24 @@ namespace WPSynchro\Database;
  */
 class DatabaseHelperFunctions
 {
+    public function databaseContainsTablesWithDifferentPrefix(): bool
+    {
+        global $wpdb;
+        $current_prefix = $wpdb->prefix;
+
+        $tablelist = $wpdb->get_results("SHOW TABLES");
+
+        $contains_different_prefix = false;
+        foreach ($tablelist as $table) {
+            $table_name = array_values((array)$table)[0];
+            if (substr($table_name, 0, strlen($current_prefix)) != $current_prefix) {
+                $contains_different_prefix = true;
+            }
+        }
+        return $contains_different_prefix;
+    }
+
+
     /**
      *  Handle table prefix name changes, if needed
      */

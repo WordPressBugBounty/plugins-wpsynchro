@@ -54,10 +54,29 @@ class AdminLog
             return;
         }
 
+        // Remove temporary tables
+        if (isset($_REQUEST['removetemporarytables']) && $_REQUEST['removetemporarytables'] == 1) {
+            $nonce = $_GET['nonce'] ?? '';
+            if (!wp_verify_nonce($nonce, 'wpsynchro_delete_temporary_tables')) {
+                echo "<div class='notice wpsynchro-notice'><p>" . __('Security token is no longer valid - Go back and try again.', 'wpsynchro') . '</p></div>';
+                return;
+            }
+
+            $common = new CommonFunctions();
+            $common->removeTemporaryTables();
+
+            echo "<script>window.location='" . menu_page_url('wpsynchro_log', false) . "';</script>";
+            return;
+        }
+
         // Get data
         $metadatalog = new SyncMetadataLog();
         $data = $metadatalog->getAllLogs();
         $data = array_reverse($data);
+
+        // Get temporary tables count
+        $common = new CommonFunctions();
+        $temporary_tables_count = $common->getTemporaryTablesCount();
 
         // Links
         $remove_logs_link = add_query_arg(
@@ -67,6 +86,14 @@ class AdminLog
             ],
             menu_page_url('wpsynchro_log', false)
         );
+        $remove_temporary_tables_link = add_query_arg(
+            [
+                'removetemporarytables' => 1,
+                'nonce' => wp_create_nonce('wpsynchro_delete_temporary_tables')
+            ],
+            menu_page_url('wpsynchro_log', false)
+        );
+
         $show_log_url = add_query_arg(
             [
                 'nonce' => wp_create_nonce('wpsynchro_show_log')
@@ -98,6 +125,8 @@ class AdminLog
         $data_for_js = [
             "logData" => $data,
             "removeAllLogs" => $remove_logs_link,
+            "temporaryTablesCount" => $temporary_tables_count,
+            "removeTemporaryTables" => $remove_temporary_tables_link,
             "showLogUrl" => $show_log_url,
             "downloadLogUrl" => $download_log_url,
             "deleteLogUrl" => $delete_log_url,

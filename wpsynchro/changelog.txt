@@ -1,3 +1,8 @@
+= 1.15.0 =
+ * Improvement: Give warning when the source database contains tables that are not prefixed with the site's prefix
+ * Improvement: Add button in "Logs" to remove any temporary tables that WP Synchro have left behind in a failing migration
+ * Change: Bump supported WP up to 7.0
+
 = 1.14.0 =
  * Bugfix: Fix a minor translation loading timing, where the plugin updater would use translation before it was loaded
  * Change: Bump supported WP up to 6.9

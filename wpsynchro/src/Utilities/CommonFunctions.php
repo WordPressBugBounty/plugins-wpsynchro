@@ -196,4 +196,28 @@ class CommonFunctions
         }
         return false;
     }
+
+    /**
+     * Get the count of temporary tables
+     */
+    public function getTemporaryTablesCount(): int
+    {
+        global $wpdb;
+        $tables = $wpdb->get_results("SHOW TABLES LIKE 'wpsyntmp_%'");
+        return count($tables);
+    }
+
+    /**
+     * Remove temporary tables
+     */
+    public function removeTemporaryTables(): void
+    {
+        global $wpdb;
+        $tables = $wpdb->get_results("SHOW TABLES LIKE 'wpsyntmp_%'");
+        foreach ($tables as $table) {
+            $table_array = get_object_vars($table);
+            $table_name = array_values($table_array)[0];
+            $wpdb->query("DROP TABLE IF EXISTS $table_name");
+        }
+    }
 }

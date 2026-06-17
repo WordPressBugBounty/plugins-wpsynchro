@@ -147,6 +147,10 @@ class MasterData extends WPSynchroService
         // Get whether the MU plugin is enabled
         $result->mu_plugin_enabled = defined('WPSYNCHRO_MU_COMPATIBILITY_VERSION');
 
+        // Add whether database contains tables with different prefix
+        $database_helper_functions = new \WPSynchro\Database\DatabaseHelperFunctions();
+        $result->database_contains_tables_with_different_prefix = $database_helper_functions->databaseContainsTablesWithDifferentPrefix();
+
         return $result;
     }
 

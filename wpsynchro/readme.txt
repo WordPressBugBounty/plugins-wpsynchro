@@ -3,8 +3,8 @@ Contributors: wpsynchro
 Donate link: https://daev.tech/wpsynchro/?utm_source=wordpress.org&utm_medium=referral&utm_campaign=donate
 Tags: migrate, clone, files, database, migration, backup, sync, staging, development, wordpress migration, site migration, move wordpress, transfer wordpress
 Requires at least: 5.8
-Tested up to: 6.9
-Stable tag: 1.14.0
+Tested up to: 7.0
+Stable tag: 1.15.0
 Requires PHP: 7.2
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0
@@ -106,6 +106,11 @@ For detailed documentation and support, visit [WP Synchro Documentation](https:/
 
 == Changelog ==
 
+= 1.15.0 =
+ * Improvement: Give warning when the source database contains tables that are not prefixed with the site's prefix
+ * Improvement: Add button in "Logs" to remove any temporary tables that WP Synchro have left behind in a failing migration
+ * Change: Bump supported WP up to 7.0
+
 = 1.14.0 =
  * Bugfix: Fix a minor translation loading timing, where the plugin updater would use translation before it was loaded
  * Change: Bump supported WP up to 6.9
@@ -123,25 +128,5 @@ For detailed documentation and support, visit [WP Synchro Documentation](https:/
 
 = 1.11.5 =
  * Bugfix: Fix links for usage reporting dialog, leading to a non-existing page
-
-= 1.11.4 =
- * Change: Bump minimum PHP requirement to 7.2 from 7.0
- * Change: Bump minimum WP requirement to 5.8 from 5.2
- * Change: Bump minimum MySQL requirement to 5.7 from 5.5
- * Change: Bump supported WP version to 6.5
- * Bugfix: Fix some issues causing menu to generate PHP deprecation issues, even though it just triggered it in WP core functions
-
-= 1.11.3 =
- * Change: Change all service URLs from wpsynchro.com to daev.tech, as we have moved the plugin there
- * Bugfix: Fixed a minor CSRF issue reported by Patchstack - Not a risk to be worried about.
-
-= 1.11.2 =
- * Bugfix: Fix PHP timeout issue caused by serialized data, kind of like 1.11.1 hotfix, but caused by other data.
- * Improvement: Added more safety against timeout issues in serialized data, so it wont happen again
-
-= 1.11.1 =
- * Bugfix: Fix PHP timeout issue caused by serialized string search/replace handler, that goes into endless loop for defective serialized strings
- * Bugfix: Fix issue with some tables not being migrated when source database is MariaDB and when table does not have a primary key
- * Improvement: Improve the error reporting when database server gives errors
 
 ** Only showing the last few releases - See rest of changelog in changelog.txt or in menu "Changelog" **

@@ -1,15 +1,15 @@
-# Copyright (C) 2025 DAEV.tech
+# Copyright (C) 2026 DAEV.tech
 # This file is distributed under the GPLv3.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP Synchro 1.14.0\n"
+"Project-Id-Version: WP Synchro 1.15.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wpsynchro\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-12-11T12:11:09+00:00\n"
+"POT-Creation-Date: 2026-06-15T12:38:04+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: wpsynchro\n"
@@ -291,24 +291,24 @@ msgstr ""
 msgid "Finalize: Warning in database migration for table %s - It differs more than %d%% in size, which indicate something has gone wrong during transfer. We found %d rows, but expected around %d rows."
 msgstr ""
 
-#: src/Database/DatabaseHelperFunctions.php:51
+#: src/Database/DatabaseHelperFunctions.php:69
 #, php-format
 msgid "Migration aborted, due to a SQL query failing. See WP Synchro log (found in menu \"Logs\") for specific information about the query that failed. The specific error from database server was: \"%s\"."
 msgstr ""
 
-#: src/Database/DatabaseHelperFunctions.php:56
+#: src/Database/DatabaseHelperFunctions.php:74
 msgid "That means that the key was longer than supported on the target database. The table need to be fixed or excluded from migration. See documentation for further help."
 msgstr ""
 
-#: src/Database/DatabaseHelperFunctions.php:59
+#: src/Database/DatabaseHelperFunctions.php:77
 msgid "That means that the charset/collation used is not supported by the target database engine. The table charset/collations needs to be changed into a supported charset/collation for the target database or excluded from migration. See documentation for further help."
 msgstr ""
 
-#: src/Database/DatabaseHelperFunctions.php:62
+#: src/Database/DatabaseHelperFunctions.php:80
 msgid "The error was caused by trying to create a view in the database. The error is normally thrown from the database server, when the view references tables that do not exist on the target database, so make sure they are there."
 msgstr ""
 
-#: src/Database/DatabaseHelperFunctions.php:65
+#: src/Database/DatabaseHelperFunctions.php:83
 msgid "If you need help, contact WP Synchro support."
 msgstr ""
 
@@ -623,7 +623,8 @@ msgstr ""
 #: src/Pages/AdminLicensing.php:35
 #: src/Pages/AdminLog.php:34
 #: src/Pages/AdminLog.php:48
-#: src/Pages/AdminLog.php:119
+#: src/Pages/AdminLog.php:61
+#: src/Pages/AdminLog.php:148
 #: src/Pages/AdminSupport.php:40
 msgid "Security token is no longer valid - Go back and try again."
 msgstr ""
@@ -1430,6 +1431,10 @@ msgid "Could not grab the file data from remote - It may be caused by different 
 msgstr ""
 
 #: dist/wpsynchro.js:423
+msgid "The source database contains tables with a different table prefix than the one defined on the site. Be careful when selecting database tables for migration, as it may includes tables from other sites or unrelated tables."
+msgstr ""
+
+#: dist/wpsynchro.js:423
 msgid "Got a response from remote site, but did not get correct response - Check access key and website url"
 msgstr ""
 
@@ -1620,11 +1625,11 @@ msgid "Verify connection to remote site"
 msgstr ""
 
 #: dist/wpsynchro.js:1138
-msgid "Errors was found"
+msgid "Errors"
 msgstr ""
 
 #: dist/wpsynchro.js:1138
-msgid "Warnings was found"
+msgid "Warnings"
 msgstr ""
 
 #: dist/wpsynchro.js:1138
@@ -2089,6 +2094,10 @@ msgstr ""
 
 #: dist/wpsynchro.js:1193
 msgid "Delete all logs"
+msgstr ""
+
+#: dist/wpsynchro.js:1193
+msgid "Delete temporary tables"
 msgstr ""
 
 #: dist/wpsynchro.js:1193

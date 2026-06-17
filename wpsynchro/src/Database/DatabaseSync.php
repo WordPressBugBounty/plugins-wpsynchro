@@ -3,8 +3,6 @@
 namespace WPSynchro\Database;
 
 use WPSynchro\Database\Exception\SerializedStringException;
-use WPSynchro\Logger\FileLogger;
-use WPSynchro\Logger\LoggerInterface;
 use WPSynchro\Migration\MigrationController;
 use WPSynchro\Transport\Destination;
 use WPSynchro\Transport\RemoteTransport;
@@ -78,6 +76,8 @@ class DatabaseSync
                         $result_from_remote_service = $this->retrieveDataFromRemoteService($table);
                     } elseif ($this->migration->type == 'push') {
                         $result_from_remote_service = $this->sendDataToRemoteService($table);
+                    } else {
+                        $result_from_remote_service = 0;
                     }
 
                     $table->completed_rows += $result_from_remote_service;
