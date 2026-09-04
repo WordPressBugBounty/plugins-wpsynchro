@@ -1,3 +1,11 @@
+= 1.16.0 =
+ * Improvement: Add an onboarding guide to help newcomers understand the terminology
+ * Improvement: Add a wizard to help create simple migrations
+ * Improvement: Make database backups available in the free version
+ * Improvement: Make the migrations run in a modal popup instead of its own page
+ * Change: Bump supported WordPress version to 7.1
+ * Change: Bump minimum PHP version to 7.4
+
 = 1.15.0 =
  * Improvement: Give warning when the source database contains tables that are not prefixed with the site's prefix
  * Improvement: Add button in "Logs" to remove any temporary tables that WP Synchro have left behind in a failing migration

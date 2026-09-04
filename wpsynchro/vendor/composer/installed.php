@@ -3,7 +3,7 @@
         'name' => 'daev/wpsynchro',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => 'e0910be9ee9750b7bc48bdaa4b539dc463e27e92',
+        'reference' => '108d6b0406952b166b1902b5f9e5891c8d3776e8',
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'daev/wpsynchro' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => 'e0910be9ee9750b7bc48bdaa4b539dc463e27e92',
+            'reference' => '108d6b0406952b166b1902b5f9e5891c8d3776e8',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

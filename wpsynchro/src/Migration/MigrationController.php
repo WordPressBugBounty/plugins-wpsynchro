@@ -24,25 +24,25 @@ class MigrationController
     use SingletonTrait;
 
     // General data
-    public $migration_id = 0;
-    public $job_id = 0;
+    public string $migration_id = '';
+    public string $job_id = '';
     // Objects
-    public $job = null;
-    public $migration = null;
+    public ?Job $job = null;
+    public ?Migration $migration = null;
     // Timer
-    public $timer = null;
+    public ?SyncTimerList $timer = null;
     // Helpers
-    public $common = null;
+    public ?CommonFunctions $common = null;
     // Errors and warnings
-    public $errors = [];
-    public $warnings = [];
+    public array $errors = [];
+    public array $warnings = [];
     // Logger
-    public $logger = null;
+    public ?FileLogger $logger = null;
 
     /**
      * Setup the data needed for migration, needed for both worker and status thread
      */
-    public function setup($migration_id, $job_id)
+    public function setup(string $migration_id, string $job_id)
     {
         // Get sync timer
         $this->timer = SyncTimerList::getInstance();

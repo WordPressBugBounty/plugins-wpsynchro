@@ -2,7 +2,10 @@
 
 namespace WPSynchro\Initiate;
 
+use WPSynchro\Migration\Migration;
+use WPSynchro\Migration\Job;
 use WPSynchro\Logger\SyncMetadataLog;
+use WPSynchro\Logger\FileLogger;
 use WPSynchro\Migration\MigrationController;
 use WPSynchro\Transport\TransferToken;
 use WPSynchro\Transport\TransferAccessKey;
@@ -17,11 +20,11 @@ use WPSynchro\Utilities\UsageReporting;
 class InitiateSync
 {
     // Base data
-    public $migration = null;
-    public $job = null;
+    public ?Migration $migration = null;
+    public ?Job $job = null;
     // Dependencies
-    public $logger = null;
-    public $timer = null;
+    public ?FileLogger $logger = null;
+    public ?SyncTimerList $timer = null;
     /**
      *  Constructor
      */
@@ -34,7 +37,7 @@ class InitiateSync
     /**
      *  Initiate sync
      */
-    public function initiateMigration(&$migration, &$job)
+    public function initiateMigration(Migration &$migration, Job &$job)
     {
         $this->migration = $migration;
         $this->job = $job;

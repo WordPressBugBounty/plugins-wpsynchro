@@ -8,6 +8,9 @@ use WPSynchro\Transport\Destination;
 use WPSynchro\Utilities\CommonFunctions;
 use WPSynchro\Utilities\Licensing\Licensing;
 use WPSynchro\Utilities\SyncTimerList;
+use WPSynchro\Migration\Migration;
+use WPSynchro\Migration\Job;
+use WPSynchro\Logger\FileLogger;
 
 /**
  * Class for handling the masterdata of the sync
@@ -16,13 +19,13 @@ use WPSynchro\Utilities\SyncTimerList;
 class MasterdataSync
 {
     // Base data
-    public $starttime = 0;
-    public $migration = null;
-    public $job = null;
-    public $remote_wpdb = null;
+    public int $starttime = 0;
+    public ?Migration $migration = null;
+    public ?Job $job = null;
+    public ?\wpdb $remote_wpdb = null;
     // Dependencies
-    public $logger = null;
-    public $timer = null;
+    public ?FileLogger $logger = null;
+    public ?SyncTimerList $timer = null;
 
     /**
      *  Constructor
@@ -36,7 +39,7 @@ class MasterdataSync
     /**
      *  Handle masterdata step
      */
-    public function runMasterdataStep(&$migration, &$job)
+    public function runMasterdataStep(Migration &$migration, Job &$job)
     {
         $masterdata_timer = $this->timer->startTimer("masterdata", "overall", "timer");
 
@@ -86,7 +89,7 @@ class MasterdataSync
 
             // Check if WP versions are different, then raise a warning, as it might not be a problem
             if ($this->job->to_wp_version != $this->job->from_wp_version) {
-                $this->job->warnings[] = sprintf(__("WordPress versions are different on the source and target. Source WP version is: %s and target WP version is: %s. This is just a warning, as in most cases it will not cause problems. But in some cases it can cause failures in the very last steps of the migration. If you experience that, make sure to have the same WP version on both ends.", "wpsynchro"), $this->job->from_wp_version, $this->job->to_wp_version);
+                $this->job->warnings[] = sprintf(__("WordPress versions are different on the source and target. Source WP version is: %s and target WP version is: %s. This is just a warning, as in most cases it will not cause problems.", "wpsynchro"), $this->job->from_wp_version, $this->job->to_wp_version);
             }
 
             // Check that prefix are the same or issue warning
@@ -222,7 +225,6 @@ class MasterdataSync
                 "_files_themes_dir" => "files_themes_dir",
                 "_files_plugin_list" => "files_plugin_list",
                 "_files_theme_list" => "files_theme_list",
-                "_files_uploads_dir" => "files_uploads_dir",
             ];
 
             foreach ($mappings as $job_key => $masterdata_key) {
@@ -273,6 +275,17 @@ class MasterdataSync
     {
         // Add system search/replaces
         $this->job->db_search_replaces = array_merge($this->migration->searchreplaces, $this->job->db_system_search_replaces);
+
+        // Regenerate the search/replaces if set in the migration
+        if ($this->migration->searchreplaces_regenerate) {
+            $common_functions = new CommonFunctions();
+            $this->job->db_search_replaces = $common_functions->generateDefaultSearchReplace(
+                $this->job->from_client_home_url,
+                $this->job->to_client_home_url,
+                $this->job->from_files_home_dir,
+                $this->job->to_files_home_dir
+            );
+        }
 
         // Ignore all search/replaces - Only used for testing purposes
         if ($this->migration->ignore_all_search_replaces) {
@@ -331,7 +344,7 @@ class MasterdataSync
     /**
      *  Clear duplicates for search/replaces
      */
-    public function removeDuplicatesFromSearchReplaces($search_replaces)
+    public function removeDuplicatesFromSearchReplaces(array $search_replaces)
     {
         $new_search_replaces = [];
         $search_replace_hashes = [];

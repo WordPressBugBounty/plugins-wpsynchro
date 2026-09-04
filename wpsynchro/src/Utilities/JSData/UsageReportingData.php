@@ -14,10 +14,8 @@ class UsageReportingData
     public function load()
     {
         $usage_reporting_localize = [
-            'introtext' => __('Help us make WP Synchro even better', 'wpsynchro'),
-            'text1' => __('Will you accept that we send 100% anonymized data to our server about your usage of WP Synchro.<br>We will <b>not</b> send any personal data at all, but only send which features you are using when doing a migration. The content we are sending to our server, can always be seen in the log file from the migration, for full transparency.', 'wpsynchro'),
-            'text2' => __('We do this to improve the plugin in the right places and to understand what is actually being used and what is not.', 'wpsynchro'),
-            'text3' => __('It can later be changed in Setup menu.', 'wpsynchro'),
+            'introtext' => __('Help us understand how you use WP Synchro', 'wpsynchro'),
+            'text1' => __('Would you like to allow us to send fully anonymized usage data to our server to help improve WP Synchro?<br>No personal data is collected.', 'wpsynchro'),
             'accept' => __('I accept', 'wpsynchro'),
             'decline' => __('No thanks', 'wpsynchro'),
 

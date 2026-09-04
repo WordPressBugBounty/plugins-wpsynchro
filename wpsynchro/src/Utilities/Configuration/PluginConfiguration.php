@@ -40,15 +40,40 @@ class PluginConfiguration
     }
 
     /**
-     *  Set slow hosting setting
+     *  Set usage reporting setting
      */
-    public function setUsageReportingSetting($usage_reporting_enabled)
+    public function setUsageReportingSetting(bool $usage_reporting_enabled)
     {
         if ($usage_reporting_enabled) {
             update_option('wpsynchro_usage_reporting_selection', 'true', false);
         } else {
             update_option('wpsynchro_usage_reporting_selection', 'false', false);
         }
+    }
+
+    /**
+     *  Set show onboarding setting
+     */
+    public function setShowOnboarding(bool $show_onboarding_help)
+    {
+        if ($show_onboarding_help) {
+            update_option('wpsynchro_show_onboarding_help', 'true', false);
+        } else {
+            update_option('wpsynchro_show_onboarding_help', 'false', false);
+        }
+    }
+
+    /**
+     *  Get show onboarding setting
+     */
+    public function getShowOnboarding()
+    {
+        $show_onboarding_help = get_option('wpsynchro_show_onboarding_help', null);
+        if ($show_onboarding_help !== null) {
+            $show_onboarding_help = $show_onboarding_help == 'true' ? true : false;
+            return $show_onboarding_help;
+        }
+        return true;
     }
 
     /**

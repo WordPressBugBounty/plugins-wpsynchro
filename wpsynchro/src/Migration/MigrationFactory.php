@@ -119,33 +119,39 @@ class MigrationFactory
 
         // Load data
         $migrations_option = get_option('wpsynchro_migrations', false);
-        if ($migrations_option !== false) {
-            foreach ($migrations_option as $migration) {
-                $temp_migration = new Migration();
-                foreach ($migration as $key => $value) {
-                    $temp_migration->$key = $value;
-                }
-                // Make sure it contains values and variables as the current version of migration
-                foreach ($migration_current_variables as $var) {
-                    if (!isset($temp_migration->$var)) {
-                        $temp_migration->$var = $migration_current->$var;
-                    }
-                    if (is_null($temp_migration->$var)) {
-                        $temp_migration->$var = $migration_current->$var;
-                    }
-                }
-                // Set generated data
-                $temp_migration->prepareGeneratedData();
-                $this->migrations[] = $temp_migration;
-            }
+        if ($migrations_option === false) {
+            $this->loaded = true;
+            return;
         }
+
+        foreach ($migrations_option as $migration) {
+            $temp_migration = new Migration();
+            foreach ($migration as $key => $value) {
+                $temp_migration->$key = $value;
+            }
+            // Make sure it contains values and variables as the current version of migration
+            foreach ($migration_current_variables as $var) {
+                if (!isset($temp_migration->$var)) {
+                    $temp_migration->$var = $migration_current->$var;
+                }
+                if (is_null($temp_migration->$var)) {
+                    $temp_migration->$var = $migration_current->$var;
+                }
+            }
+
+            // Set generated data
+            $temp_migration->prepareGeneratedData();
+
+            $this->migrations[] = $temp_migration;
+        }
+
         $this->loaded = true;
     }
 
     /**
      * Function to add a migration
      */
-    public function addMigration(migration $migration)
+    public function addMigration(Migration $migration)
     {
         if (!$this->loaded) {
             $this->loadData();
@@ -161,38 +167,5 @@ class MigrationFactory
         }
         $this->migrations[] = $migration;
         $this->save();
-    }
-
-    /**
-     * Function to start a migration (if not started)
-     */
-    public function startMigrationSync($id, $job_id)
-    {
-        if (!$this->loaded) {
-            $this->loadData();
-        }
-
-        // Check if exists
-        $migration = null;
-        foreach ($this->migrations as $migration) {
-            if ($migration->id == $id) {
-                $migration = $migration;
-                break;
-            }
-        }
-
-        if ($migration == null) {
-            return null;
-        }
-
-        // Create specific job for processing in db
-        $job_identifier = 'wpsynchro_' . $id . '_' . $job_id;
-        $job = get_option($job_identifier, false);
-        if (!$job) {
-            $job_arr = [];
-            update_option($job_identifier, $job_arr, false);
-        }
-
-        return $job_id;
     }
 }

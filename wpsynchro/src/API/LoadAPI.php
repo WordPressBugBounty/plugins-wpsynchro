@@ -237,7 +237,7 @@ class LoadAPI
     /**
      *  Validates access to WP Synchro services
      */
-    public function permissionCheck($token)
+    public function permissionCheck(string $token)
     {
         if ($token == null || strlen($token) < 20) {
             return false;

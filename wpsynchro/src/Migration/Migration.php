@@ -10,63 +10,64 @@ use WPSynchro\Schedule\ScheduledMigration;
 
 class Migration
 {
-    public $id = '';
-    public $name = '';
+    public string $id = '';
+    public string $name = '';
     // Type
-    public $type = '';
+    public string $type = '';
     // From
-    public $site_url = '';
-    public $access_key = '';
+    public string $site_url = '';
+    public string $access_key = '';
     // Connection options
-    public $connection_type = "direct";
-    public $basic_auth_username = "";
-    public $basic_auth_password = "";
+    public string $connection_type = "direct";
+    public string $basic_auth_username = "";
+    public string $basic_auth_password = "";
     // General settings
-    public $verify_ssl = true;
-    public $clear_cache_on_success = true;
-    public $success_notification_email_list = "";
-    public $error_notification_email_list = "";
+    public bool $verify_ssl = true;
+    public bool $clear_cache_on_success = true;
+    public string $success_notification_email_list = "";
+    public string $error_notification_email_list = "";
     // Data to sync
-    public $sync_preset = "all";
-    public $sync_database = false;
-    public $sync_files = false;
+    public string $sync_preset = "all";
+    public bool $sync_database = false;
+    public bool $sync_files = false;
     // Scheduling
-    public $schedule_interval = '';
+    public string $schedule_interval = '';
     /*
      * Database
      */
-    public $db_make_backup = true;
-    public $db_table_prefix_change = true;
+    public bool $db_make_backup = true;
+    public bool $db_table_prefix_change = true;
     // Exclusions DB
-    public $include_all_database_tables = true;
-    public $only_include_database_table_names = [];
+    public bool $include_all_database_tables = true;
+    public array $only_include_database_table_names = [];
     // Search / replaces in db
-    public $searchreplaces = [];
-    public $ignore_all_search_replaces = false;
+    public bool $searchreplaces_regenerate = true;
+    public array $searchreplaces = [];
+    public bool $ignore_all_search_replaces = false;
     // Preserve wp_options keys
-    public $db_preserve_options_table_keys = [
+    public array $db_preserve_options_table_keys = [
         'active_plugins',
         'blog_public',
     ];
-    public $db_preserve_options_custom = "";
+    public string $db_preserve_options_custom = "";
 
     /*
      *  Files
      */
-    public $file_locations = [];
-    public $files_exclude_files_match = "node_modules,.DS_Store,.git";
-    public $files_ask_user_for_confirm = false;
+    public array $file_locations = [];
+    public string $files_exclude_files_match = "node_modules,.DS_Store,.git";
+    public bool $files_ask_user_for_confirm = false;
 
     /*
      * Errors
      */
-    public $validate_errors = [];
+    public array $validate_errors = [];
 
     /**
      *  Generated content
      */
-    public $description = null;
-    public $can_run = false;
+    public ?string $description = null;
+    public bool $can_run = false;
 
     // Constants
     const SYNC_TYPES = ['pull', 'push'];
@@ -211,10 +212,6 @@ class Migration
             $errors[] = __("File migration is only available in PRO version", "wpsynchro");
         }
 
-        if (!$ispro && ($this->sync_preset == "all" || $this->db_make_backup == true)) {
-            $errors[] = __("Database backup is only available in PRO version", "wpsynchro");
-        }
-
         return $errors;
     }
 
@@ -247,6 +244,7 @@ class Migration
             // DB
             $this->sync_database = true;
             $this->db_make_backup = true;
+            $this->searchreplaces_regenerate = true;
             $this->db_table_prefix_change = true;
             $this->db_preserve_options_table_keys = $migration_clean->db_preserve_options_table_keys;
             $this->include_all_database_tables = true;
@@ -260,6 +258,7 @@ class Migration
             // DB
             $this->sync_database = true;
             $this->db_make_backup = true;
+            $this->searchreplaces_regenerate = true;
             $this->db_table_prefix_change = true;
             $this->db_preserve_options_table_keys = $migration_clean->db_preserve_options_table_keys;
             $this->include_all_database_tables = true;
@@ -281,7 +280,6 @@ class Migration
 
         if (!$is_pro) {
             $this->schedule_interval = '';
-            $this->db_make_backup = false;
             $this->sync_files = false;
             $this->success_notification_email_list = "";
             $this->error_notification_email_list = "";
@@ -294,7 +292,7 @@ class Migration
     /**
      *  Map function
      */
-    public static function map($obj)
+    public static function map(object $obj)
     {
         $temp_migration = new self();
         if (is_object($obj)) {
@@ -323,20 +321,9 @@ class Migration
     }
 
     /**
-     *  Add search/replace
-     */
-    public function getSearchReplaceObject($from, $to)
-    {
-        $sr = new \stdClass();
-        $sr->from = $from;
-        $sr->to = $to;
-        return $sr;
-    }
-
-    /**
      *  Retrieve a list of emails from a field
      */
-    private function getEmailList($type)
+    private function getEmailList(string $type)
     {
         // Get data
         $data = "";
@@ -361,7 +348,7 @@ class Migration
     /**
      *  Remove preserve wp_options database key
      */
-    public function removePreserveOptionsKey($key)
+    public function removePreserveOptionsKey(string $key)
     {
         if (($key = array_search($key, $this->db_preserve_options_table_keys)) !== false) {
             unset($this->db_preserve_options_table_keys[$key]);
@@ -371,10 +358,10 @@ class Migration
     /**
      *  Remove preserve wp_options database key
      */
-    public function setPreserveOptionsKey($key)
+    public function setPreserveOptionsKey(string $key)
     {
-        if (!in_array($key, $this->db_preserve_activeplugins)) {
-            $this->db_preserve_activeplugins[] = $key;
+        if (!in_array($key, $this->db_preserve_options_table_keys)) {
+            $this->db_preserve_options_table_keys[] = $key;
         }
         return true;
     }

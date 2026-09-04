@@ -6,7 +6,7 @@ class SerializedStringException extends \Exception
 {
     public $data = '';
 
-    public function __construct(string $message, int $code = 0, string $data = '', \Throwable $previous = null)
+    public function __construct(string $message, int $code = 0, string $data = '', \Throwable|null $previous = null)
     {
         $this->data = $data;
 

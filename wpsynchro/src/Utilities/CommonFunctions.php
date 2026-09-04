@@ -220,4 +220,65 @@ class CommonFunctions
             $wpdb->query("DROP TABLE IF EXISTS $table_name");
         }
     }
+
+    // Generate default search/replace values for the migration
+    public function generateDefaultSearchReplace(string $source_url, string $target_url, string $source_web_root, string $target_web_root): array
+    {
+        $search_replace = [];
+
+        $source_url = untrailingslashit($source_url);
+        $target_url = untrailingslashit($target_url);
+
+        $search_replace[] = (object) [
+            'from' => $source_url,
+            'to' => $target_url
+        ];
+
+        // Also make sure to add the http/https version if not already included
+        if (strpos($source_url, "http://") === 0) {
+            $source_url_alt = "https://" . substr($source_url, 7);
+        } else {
+            $source_url_alt = "http://" . substr($source_url, 8);
+        }
+        $search_replace[] = (object) [
+            'from' => $source_url_alt,
+            'to' => $target_url,
+        ];
+
+        // Add escaped variants for plugins storing escaped URLs in the database.
+        $escaped_target_url = str_replace('/', '\\/', $target_url);
+        $escaped_source_url = str_replace('/', '\\/', $source_url);
+        $escaped_source_url_alt = str_replace('/', '\\/', $source_url_alt);
+        $search_replace[] = (object) [
+            'from' => $escaped_source_url,
+            'to' => $escaped_target_url,
+        ];
+        $search_replace[] = (object) [
+            'from' => $escaped_source_url_alt,
+            'to' => $escaped_target_url,
+        ];
+
+        // Add URL-encoded variants for builders storing encoded URLs in shortcodes.
+        $urlencoded_target_url = rawurlencode($target_url);
+        $urlencoded_source_url = rawurlencode($source_url);
+        $urlencoded_source_url_alt = rawurlencode($source_url_alt);
+        $search_replace[] = (object) [
+            'from' => $urlencoded_source_url,
+            'to' => $urlencoded_target_url,
+        ];
+        $search_replace[] = (object) [
+            'from' => $urlencoded_source_url_alt,
+            'to' => $urlencoded_target_url,
+        ];
+
+        // Rewrite the web root paths if they are different
+        if ($source_web_root !== $target_web_root) {
+            $search_replace[] = (object) [
+                'from' => $source_web_root,
+                'to' => $target_web_root,
+            ];
+        }
+
+        return $search_replace;
+    }
 }

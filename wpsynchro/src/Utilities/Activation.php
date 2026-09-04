@@ -15,7 +15,7 @@ class Activation
     /**
      *  Activate
      */
-    public static function activate($networkwide)
+    public static function activate(bool $networkwide)
     {
         /**
          *  If multisite and network activated, give error to prevent it from happening

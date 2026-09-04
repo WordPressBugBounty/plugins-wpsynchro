@@ -153,7 +153,7 @@ class CustomPHPErrorHandler
                 return 'E_USER_WARNING';
             case E_USER_NOTICE: // 1024 //
                 return 'E_USER_NOTICE';
-            case E_STRICT: // 2048 //
+            case 2048: // E_STRICT, deprecated as a constant since PHP 8.4, folded into E_ALL //
                 return 'E_STRICT';
             case E_RECOVERABLE_ERROR: // 4096 //
                 return 'E_RECOVERABLE_ERROR';

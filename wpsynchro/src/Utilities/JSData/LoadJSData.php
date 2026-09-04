@@ -13,8 +13,10 @@ class LoadJSData
      */
     public function load()
     {
+        (new OnboardingData())->load();
         (new UsageReportingData())->load();
         (new HealthCheckData())->load();
         (new PageHeaderData())->load();
+        (new AddMigrationWizard())->load();
     }
 }

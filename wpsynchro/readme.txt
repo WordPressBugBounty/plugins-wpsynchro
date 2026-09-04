@@ -3,9 +3,9 @@ Contributors: wpsynchro
 Donate link: https://daev.tech/wpsynchro/?utm_source=wordpress.org&utm_medium=referral&utm_campaign=donate
 Tags: migrate, clone, files, database, migration, backup, sync, staging, development, wordpress migration, site migration, move wordpress, transfer wordpress
 Requires at least: 5.8
-Tested up to: 7.0
-Stable tag: 1.15.0
-Requires PHP: 7.2
+Tested up to: 7.1
+Stable tag: 1.16.0
+Requires PHP: 7.4
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0
 
@@ -21,6 +21,7 @@ Easily migrate, clone, backup, and synchronize your WordPress site, including da
 * One-click WordPress database migration (pull/push)
 * Search/replace in database data (supports serialized data)
 * Handles migration of database table prefixes between sites
+* Database backup before migration
 * Select specific database tables or migrate all
 * Automatic cache clearing after migration for popular cache plugins
 * Secure, encrypted data transfer – no third-party servers
@@ -33,7 +34,6 @@ Easily migrate, clone, backup, and synchronize your WordPress site, including da
 * Customize migrations down to a single file or folder
 * Support for basic authentication (.htaccess)
 * Email notifications on migration success or failure
-* Database backup before migration
 * WP CLI command for scheduled migrations (cron)
 * 14-day free trial for PRO features
 
@@ -105,6 +105,14 @@ Contact us at <support@daev.tech>.
 For detailed documentation and support, visit [WP Synchro Documentation](https://daev.tech/wpsynchro/docs).
 
 == Changelog ==
+
+= 1.16.0 =
+ * Improvement: Add an onboarding guide to help newcomers understand the terminology
+ * Improvement: Add a wizard to help create simple migrations
+ * Improvement: Make database backups available in the free version
+ * Improvement: Make the migrations run in a modal popup instead of its own page
+ * Change: Bump supported WordPress version to 7.1
+ * Change: Bump minimum PHP version to 7.4
 
 = 1.15.0 =
  * Improvement: Give warning when the source database contains tables that are not prefixed with the site's prefix
