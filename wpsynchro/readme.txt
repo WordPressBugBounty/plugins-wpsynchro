@@ -4,7 +4,7 @@ Donate link: https://daev.tech/wpsynchro/?utm_source=wordpress.org&utm_medium=re
 Tags: migrate, clone, files, database, migration, backup, sync, staging, development, wordpress migration, site migration, move wordpress, transfer wordpress
 Requires at least: 5.8
 Tested up to: 7.1
-Stable tag: 1.16.0
+Stable tag: 1.16.1
 Requires PHP: 7.4
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0
@@ -105,6 +105,9 @@ Contact us at <support@daev.tech>.
 For detailed documentation and support, visit [WP Synchro Documentation](https://daev.tech/wpsynchro/docs).
 
 == Changelog ==
+
+= 1.16.1 =
+ * Hotfix: Add missing file for database backup functionality, which was enabled in the free version
 
 = 1.16.0 =
  * Improvement: Add an onboarding guide to help newcomers understand the terminology

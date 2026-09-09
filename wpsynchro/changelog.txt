@@ -1,3 +1,6 @@
+= 1.16.1 =
+ * Hotfix: Add missing file for database backup functionality, which was enabled in the free version
+
 = 1.16.0 =
  * Improvement: Add an onboarding guide to help newcomers understand the terminology
  * Improvement: Add a wizard to help create simple migrations
