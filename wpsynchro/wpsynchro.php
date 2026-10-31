@@ -3,7 +3,7 @@
   Plugin Name: WP Synchro FREE
   Plugin URI: https://daev.tech/wpsynchro
   Description: Professional migration plugin for WordPress - Migration of database and files made easy
-  Version: 1.16.1
+  Version: 1.16.2
   Author: DAEV.tech
   Author URI: https://daev.tech
   Domain Path: /languages
@@ -34,9 +34,9 @@ if (!defined('ABSPATH')) {
     exit;
 } // Exit if accessed directly
 
-define('WPSYNCHRO_VERSION', '1.16.1');
+define('WPSYNCHRO_VERSION', '1.16.2');
 define('WPSYNCHRO_DB_VERSION', '10');
-define('WPSYNCHRO_NEWEST_MU_COMPATIBILITY_VERSION', '1.0.5');
+define('WPSYNCHRO_NEWEST_MU_COMPATIBILITY_VERSION', '1.0.6');
 
 // Load composer autoloader
 require_once dirname(__FILE__) . '/vendor/autoload.php';

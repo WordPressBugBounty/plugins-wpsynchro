@@ -54,12 +54,14 @@ class ClientSyncDatabase extends WPSynchroService
 
 
         if ($type == "pull") {
+            $this->requireTransferDirection('pull');
             $database_helper_functions = new DatabaseHelperFunctions();
             $data_result_from_db = $database_helper_functions->getDataFromDB($table, $column_names, $primary_key_column, $last_primary_key, $completed_rows, $max_response_size, $default_rows_per_request, $time_limit);
             $result->data = $data_result_from_db->data;
             $result->has_more_rows_in_table = $data_result_from_db->has_more_rows_in_table;
             $result->errors = array_merge($result->errors, $data_result_from_db->errors);
         } elseif ($type == "push") {
+            $this->requireTransferDirection('push');
             $wpdb->query("SET FOREIGN_KEY_CHECKS=0;");
             // If multiple sql inserts
             if (is_array($sql_inserts)) {
@@ -82,6 +84,7 @@ class ClientSyncDatabase extends WPSynchroService
                 }
             }
         } elseif ($type == "finalize") {
+            $this->requireTransferDirection('push');
             $wpdb->query("SET FOREIGN_KEY_CHECKS=0;");
             foreach ($sql_inserts as $sql_insert) {
                 $result->data = $wpdb->query($sql_insert);
@@ -90,6 +93,9 @@ class ClientSyncDatabase extends WPSynchroService
                     $wpdb->last_error = '';
                 }
             }
+        } else {
+            // Unknown type is not executed
+            $result->errors[] = __("Error from database sync service - Check the log file for further information.", "wpsynchro");
         }
 
         if ($result->data === false) {

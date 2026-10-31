@@ -4,7 +4,7 @@ Donate link: https://daev.tech/wpsynchro/?utm_source=wordpress.org&utm_medium=re
 Tags: migrate, clone, files, database, migration, backup, sync, staging, development, wordpress migration, site migration, move wordpress, transfer wordpress
 Requires at least: 5.8
 Tested up to: 7.1
-Stable tag: 1.16.1
+Stable tag: 1.16.2
 Requires PHP: 7.4
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0
@@ -105,6 +105,11 @@ Contact us at <support@daev.tech>.
 For detailed documentation and support, visit [WP Synchro Documentation](https://daev.tech/wpsynchro/docs).
 
 == Changelog ==
+
+= 1.16.2 =
+ * Hotfix: Fix CVE-2026-41558, which allowed for authentication bypass on pages, such as wp-login.php supplied by other plugins (such as 2fa plugins)
+ * Hotfix: Improve handling and security of transfer token to prevent misuse (thanks to Trang Si Hoang for reporting this)
+ * Hotfix: Improve memory handling during database backup to make it more unlikely to hit memory limits
 
 = 1.16.1 =
  * Hotfix: Add missing file for database backup functionality, which was enabled in the free version

@@ -22,6 +22,7 @@ class ClearCurrentTransfer implements Action
      */
     public function doAction($params)
     {
-        TransferToken::deleteTransferToken();
+        $token = isset($_REQUEST['token']) ? $_REQUEST['token'] : null;
+        TransferToken::deleteTransferToken($token);
     }
 }

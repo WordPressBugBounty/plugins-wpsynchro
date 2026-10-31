@@ -79,6 +79,18 @@ class DatabaseBackup extends WPSynchroService
             $rows_per_run = 9900;
         }
 
+        // The average row size is a table-wide statistic, so rows can be much larger than it suggests.
+        // Keep each query small, so the memory used by a single fetch is bounded - the fetch loop collects more until the response size is reached
+        $has_large_columns = false;
+        foreach (['text', 'mediumtext', 'longtext', 'blob', 'mediumblob', 'longblob', 'json'] as $large_type) {
+            if ($table->column_types->isColumnTypeUsed($large_type)) {
+                $has_large_columns = true;
+                break;
+            }
+        }
+        $rows_per_run = min($rows_per_run, $has_large_columns ? 200 : 2000);
+        $rows_per_run = max($rows_per_run, 1);
+
         $database_helper_functions = new DatabaseHelperFunctions();
         $one_mb = 1024 * 1024;
 
@@ -128,8 +140,14 @@ class DatabaseBackup extends WPSynchroService
         // If any rows, get the insert sql version and insert into file
         $rows_fetched = count($data);
         if ($rows_fetched > 0) {
+            // Bound the insert size by the memory available, as a single large value is copied several times while building the insert
+            $available_memory = $memory_limit - memory_get_usage();
+            $max_packet_bytes = (int) max(1024 * 1024, min(200 * 1024 * 1024, $available_memory / 6));
+            $databasesync->job->masterdata_max_memory_limit_bytes = max(1024 * 1024, $available_memory);
+
             $sql_inserts = ["SET FOREIGN_KEY_CHECKS=0"];
-            $sql_inserts = array_merge($sql_inserts, $databasesync->generateSQLInserts($table, $data, (200 * 1024 * 1024)));
+            $sql_inserts = array_merge($sql_inserts, $databasesync->generateSQLInserts($table, $data, $max_packet_bytes));
+            unset($data, $data_result_from_db);
 
             foreach ($sql_inserts as &$sqlinsert) {
                 $sqlinsert .= ";" . PHP_EOL;

@@ -24,6 +24,17 @@ class Initiate extends WPSynchroService
         $allowed_types = ['push', 'pull', 'local'];
         if (isset($_REQUEST['type']) && in_array($_REQUEST['type'], $allowed_types)) {
             $type = $_REQUEST['type'];
+            $exclusive = (($_REQUEST['exclusive'] ?? '0') === '1');
+
+            // Only callers that know the access key can start a transfer
+            if (!TransferToken::verifyInitiateProof($type, $exclusive, $_REQUEST['ts'] ?? null, $_REQUEST['nonce'] ?? null, $_REQUEST['proof'] ?? null)) {
+                $return_result = new ReturnResult();
+                $return_result->init();
+                $sync_response->errors[] = __('Authentication failed - Check that the access key is correct and that both sites run the same, updated version of WP Synchro', 'wpsynchro');
+                $return_result->setDataObject($sync_response);
+                return $return_result->echoDataFromServiceAndExit();
+            }
+
             // Get allowed methods for this site
             $plugin_configuration = new PluginConfiguration();
             $methods_allowed = $plugin_configuration->getAllowedMigrationMethods();
@@ -55,9 +66,15 @@ class Initiate extends WPSynchroService
             return $return_result->echoDataFromServiceAndExit();
         }
 
-        // Create a new transfer object
-        $token_class = new TransferToken();
-        $token = $token_class->setNewToken($token_lifespan);
+        // Create a new transfer object - Migrations are only allowed one at a time
+        $token = TransferToken::setNewToken($token_lifespan, $exclusive, $type);
+        if ($token === false) {
+            $sync_response->errors[] = __('Another migration is currently running on this site - Wait for it to finish, or abort it, and try again', 'wpsynchro');
+            $return_result = new ReturnResult();
+            $return_result->init();
+            $return_result->setDataObject($sync_response);
+            return $return_result->echoDataFromServiceAndExit();
+        }
         $sync_response->token = $token;
 
         // Check if MU plugin needs update

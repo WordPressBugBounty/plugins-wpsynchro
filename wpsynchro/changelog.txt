@@ -1,3 +1,8 @@
+= 1.16.2 =
+ * Hotfix: Fix CVE-2026-41558, which allowed for authentication bypass on pages, such as wp-login.php supplied by other plugins (such as 2fa plugins)
+ * Hotfix: Improve handling and security of transfer token to prevent misuse (thanks to Trang Si Hoang for reporting this)
+ * Hotfix: Improve memory handling during database backup to make it more unlikely to hit memory limits
+
 = 1.16.1 =
  * Hotfix: Add missing file for database backup functionality, which was enabled in the free version
 

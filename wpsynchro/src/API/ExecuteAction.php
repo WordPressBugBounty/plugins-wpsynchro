@@ -5,6 +5,7 @@ namespace WPSynchro\API;
 use WPSynchro\Transport\ReturnResult;
 use WPSynchro\Transport\Transfer;
 use WPSynchro\Transport\TransferAccessKey;
+use WPSynchro\Transport\TransferToken;
 use WPSynchro\Utilities\Actions\ClearCachesOnSuccess;
 use WPSynchro\Utilities\Actions\ClearCurrentTransfer;
 use WPSynchro\Utilities\Actions\ClearTransients;
@@ -30,6 +31,10 @@ class ExecuteAction extends WPSynchroService
 
         if (in_array("cleartransfertoken", $data)) {
             (new ClearCurrentTransfer())->doAction([]);
+        }
+
+        if (in_array("releasetransfertoken", $data)) {
+            TransferToken::releaseTransfer($_REQUEST['token'] ?? '');
         }
 
         // Clear site transients, always, to prevent wrong data in transients after transfer

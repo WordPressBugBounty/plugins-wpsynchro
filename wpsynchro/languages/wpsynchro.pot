@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv3.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP Synchro 1.16.0\n"
+"Project-Id-Version: WP Synchro 1.16.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wpsynchro\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-08-31T19:18:37+00:00\n"
+"POT-Creation-Date: 2026-10-31T19:31:55+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: wpsynchro\n"
@@ -40,17 +40,18 @@ msgid "https://daev.tech"
 msgstr ""
 
 #: src/API/ClientSyncDatabase.php:35
+#: src/API/ClientSyncDatabase.php:98
 msgid "Error from database sync service - Check the log file for further information."
 msgstr ""
 
 #. translators: %s is replaced with file path to database backup
-#: src/API/DatabaseBackup.php:117
+#: src/API/DatabaseBackup.php:129
 #, php-format
 msgid "Appending create table for database backup to %s failed."
 msgstr ""
 
 #. translators: %s is replaced with file path to database backup
-#: src/API/DatabaseBackup.php:142
+#: src/API/DatabaseBackup.php:160
 #, php-format
 msgid "Appending databasebackup to %s failed."
 msgstr ""
@@ -153,15 +154,23 @@ msgid "Path that WP Synchro might use for migration is not writable- Path: %s - 
 msgstr ""
 
 #: src/API/Initiate.php:33
+msgid "Authentication failed - Check that the access key is correct and that both sites run the same, updated version of WP Synchro"
+msgstr ""
+
+#: src/API/Initiate.php:44
 msgid "Pulling from this site is not allowed - Change configuration on remote server"
 msgstr ""
 
-#: src/API/Initiate.php:35
+#: src/API/Initiate.php:46
 msgid "Pushing to this site is not allowed - Change configuration on remote server"
 msgstr ""
 
-#: src/API/Initiate.php:48
+#: src/API/Initiate.php:59
 msgid "Remote host does not allow that - Make sure it is same WP Synchro version"
+msgstr ""
+
+#: src/API/Initiate.php:72
+msgid "Another migration is currently running on this site - Wait for it to finish, or abort it, and try again"
 msgstr ""
 
 #: src/API/LoadAPI.php:211
@@ -225,6 +234,10 @@ msgstr ""
 #: src/API/VerifyMigration.php:237
 #, php-format
 msgid "Could not get masterdata from %s - Check that WP Synchro is installed, connection to the site is not blocked and that health check runs without errors on the site"
+msgstr ""
+
+#: src/API/WPSynchroService.php:31
+msgid "This transfer is not allowed to do that - The migration type was not initiated for this operation"
 msgstr ""
 
 #: src/CLI/WPCLICommand.php:43
@@ -326,17 +339,22 @@ msgstr ""
 msgid "Database migration failed with error, which means we can not continue the migration."
 msgstr ""
 
-#: src/Database/DatabaseSync.php:422
+#: src/Database/DatabaseSync.php:408
+#, php-format
+msgid "Large row with string column ignored from table: %s - Size of value: %d - Max size %d bytes - Increase memory limit on server"
+msgstr ""
+
+#: src/Database/DatabaseSync.php:431
 #, php-format
 msgid "Large row with binary column ignored from table: %s - Size of value: %d - Max size %d bytes - Increase memory limit on server"
 msgstr ""
 
-#: src/Database/DatabaseSync.php:448
+#: src/Database/DatabaseSync.php:457
 #, php-format
 msgid "Large row ignored from table: %s - Size: %d - This happens when a table row is larger than your system limits allows. These limits are a combination of max SQL packet size, memory limits and PHP max_post_size on both ends of the migration."
 msgstr ""
 
-#: src/Database/DatabaseSync.php:671
+#: src/Database/DatabaseSync.php:680
 #, php-format
 msgid "Data: %s / %s - Rows: %s / %s"
 msgstr ""
@@ -468,12 +486,12 @@ msgstr ""
 msgid "Failed initializing - No 'from' token could be found after initialize"
 msgstr ""
 
-#: src/Initiate/InitiateSync.php:124
+#: src/Initiate/InitiateSync.php:130
 #, php-format
 msgid "Could not initialize with %s - Check that WP Synchro is installed, connection to the site is not blocked, migration type (push/pull) is allowed in setup and that health check runs without errors on the site"
 msgstr ""
 
-#: src/Initiate/InitiateTokenRetrieval.php:72
+#: src/Initiate/InitiateTokenRetrieval.php:79
 msgid "Could not initate with site: "
 msgstr ""
 
@@ -621,7 +639,7 @@ msgstr ""
 msgid "File migration is only available in PRO version"
 msgstr ""
 
-#: src/Migration/MigrationController.php:90
+#: src/Migration/MigrationController.php:93
 msgid "Job is already running or error has happened - Check PHP error logs"
 msgstr ""
 

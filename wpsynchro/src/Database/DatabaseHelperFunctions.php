@@ -111,7 +111,8 @@ class DatabaseHelperFunctions
 
             if ($is_using_primary_key) {
                 $sql_stmt = $wpdb->prepare(
-                    "SELECT * FROM `$table` WHERE `$primary_key_column` > %s ORDER BY `$primary_key_column` ASC LIMIT %d",
+                    // FORCE INDEX, as MySQL 8 can pick a full scan + filesort on large tables with big text columns, which takes far too long
+                    "SELECT * FROM `$table` FORCE INDEX (PRIMARY) WHERE `$primary_key_column` > %s ORDER BY `$primary_key_column` ASC LIMIT %d",
                     $last_primary_key,
                     $rows_to_fetch
                 );
@@ -125,6 +126,8 @@ class DatabaseHelperFunctions
                 $errors[] = $wpdb->last_error;
                 $wpdb->last_error = '';
             }
+            // Drop wpdb's own copy of the result set, as flush() also resets last_error, it must be after the error check
+            $wpdb->flush();
 
             if (empty($sql_result)) {
                 $has_more_rows_in_table = false;

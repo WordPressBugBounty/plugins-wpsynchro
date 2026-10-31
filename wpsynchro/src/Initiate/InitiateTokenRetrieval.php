@@ -5,6 +5,7 @@ namespace WPSynchro\Initiate;
 use WPSynchro\Logger\LoggerInterface;
 use WPSynchro\Transport\Destination;
 use WPSynchro\Transport\RemoteTransport;
+use WPSynchro\Transport\TransferToken;
 
 /**
  * Retrieves initiate token from url
@@ -13,6 +14,8 @@ class InitiateTokenRetrieval
 {
     public $sync_type;
     public $destination;
+    // Initiate for an actual migration (exclusive), instead of other use like health check and verify
+    public $is_migration = false;
     // Data retrieved
     public $service_result;
     public $token = '';
@@ -45,10 +48,14 @@ class InitiateTokenRetrieval
         // Get url
         $url = $this->destination->getFullURL() . '?action=wpsynchro_initiate&type=';
         if ($this->destination->getDestination() == Destination::LOCAL) {
-            $url .= 'local';
+            $type = 'local';
         } else {
-            $url .= $this->sync_type;
+            $type = $this->sync_type;
         }
+        $url .= $type;
+
+        // Prove knowledge of the access key, without sending it
+        $url = add_query_arg(TransferToken::getInitiateProofParameters($this->destination->getAccessKey(), $type, $this->is_migration), $url);
 
         // Get remote transfer object
         $remotetransport = new RemoteTransport();

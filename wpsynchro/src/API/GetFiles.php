@@ -14,6 +14,8 @@ class GetFiles extends WPSynchroService
 {
     public function service()
     {
+        $this->requireTransferDirection('pull');
+
         // Get transfer object, so we can get data
         $transfer = new Transfer();
         $transfer->setEncryptionKey(TransferAccessKey::getAccessKey());

@@ -402,6 +402,15 @@ class DatabaseSync
                     $temp_insert_add .= 'NULL,';
                 } elseif ($table->column_types->isString($col)) {
                     // Handle string values
+                    $string_length = strlen($val);
+                    $available_memory = $this->job->masterdata_max_memory_limit_bytes;
+                    if ($available_memory > 0 && $string_length * 4 > $available_memory) {
+                        $warningsmsg = sprintf(__('Large row with string column ignored from table: %s - Size of value: %d - Max size %d bytes - Increase memory limit on server', 'wpsynchro'), $table->name, $string_length, $available_memory);
+                        $this->logger->log('WARNING', $warningsmsg);
+                        $this->job->warnings[] = $warningsmsg;
+                        $error_during_column_handling = true;
+                        break;
+                    }
                     if ($col != 'guid') {
                         $this->handleSearchReplace($val);
                     }

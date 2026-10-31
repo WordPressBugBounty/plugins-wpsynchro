@@ -11,6 +11,9 @@ use WPSynchro\Initiate\InitiateSync;
 use WPSynchro\Logger\FileLogger;
 use WPSynchro\Logger\SyncMetadataLog;
 use WPSynchro\Masterdata\MasterdataSync;
+use WPSynchro\Transport\Destination;
+use WPSynchro\Transport\RemoteTransport;
+use WPSynchro\Transport\TransferToken;
 use WPSynchro\Utilities\Actions;
 use WPSynchro\Utilities\CommonFunctions;
 use WPSynchro\Utilities\SyncTimerList;
@@ -190,6 +193,12 @@ class MigrationController
             $metadatalog->setMigrationToFailed($this->job_id, $this->migration_id);
         }
 
+        // Free the migration slot on both sites, when stopping on errors or completing, so a new migration can start right away
+        // If we crash instead (PHP errors, timeouts), the slot is freed when the transfer has been idle for a bit
+        if (count($this->job->errors) > 0 || $this->job->is_completed) {
+            $this->releaseTransfers();
+        }
+
         // If we are completed
         if ($this->job->is_completed) {
             // Do migration completed action
@@ -215,6 +224,40 @@ class MigrationController
         $this->job->save();
 
         $this->logger->log("INFO", "User restarted the migration");
+    }
+
+    /**
+     *  Release the migration transfers on local and remote site (best effort)
+     */
+    private function releaseTransfers()
+    {
+        if (strlen($this->job->local_transfer_token) == 0) {
+            return;
+        }
+
+        TransferToken::releaseTransfer($this->job->local_transfer_token);
+
+        if (strlen($this->job->remote_transfer_token) == 0 || $this->timer->getRemainingSyncTime() < 3) {
+            return;
+        }
+
+        $errors = $this->job->errors;
+        $warnings = $this->job->warnings;
+        try {
+            $destination = new Destination(Destination::REMOTE);
+            $remotetransport = new RemoteTransport();
+            $remotetransport->setDestination($destination);
+            $remotetransport->init();
+            $remotetransport->setUrl($destination->getFullURL() . '?action=wpsynchro_execute_action');
+            $remotetransport->setDataObject(["releasetransfertoken"]);
+            $remotetransport->setNoRetries();
+            $remotetransport->remotePOST();
+        } catch (\Throwable $e) {
+            $this->logger->log("DEBUG", "Could not release transfer on remote site: " . $e->getMessage());
+        }
+        // Failing to release is not an error for the migration, as the remote transfer is freed by inactivity
+        $this->job->errors = $errors;
+        $this->job->warnings = $warnings;
     }
 
     /**

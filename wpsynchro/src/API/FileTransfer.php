@@ -15,6 +15,8 @@ class FileTransfer extends WPSynchroService
 {
     public function service()
     {
+        $this->requireTransferDirection('push');
+
         // init
         $timer = SyncTimerList::getInstance();
         $timer->init();

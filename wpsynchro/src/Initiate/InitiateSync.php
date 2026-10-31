@@ -97,6 +97,11 @@ class InitiateSync
             }
         }
 
+        // Release the local transfer again, if initiation failed, so it does not block new migrations
+        if (count($this->job->errors) > 0 && is_string($local_token) && strlen($local_token) > 0) {
+            TransferToken::deleteTransferToken(TransferToken::getTransferToken(TransferAccessKey::getAccessKey(), $local_token));
+        }
+
         $this->logger->log("INFO", "Initation completed on: " . $this->timer->endTimer($initiate_timer) . " seconds");
         if (count($this->job->errors) == 0) {
             $this->job->initiation_completed = true;
@@ -114,6 +119,7 @@ class InitiateSync
 
         $this->logger->log("DEBUG", "Calling initate service for destination: " . $destination->getDestination());
         $initiate_retrieval = new InitiateTokenRetrieval($this->logger, $destination, $this->migration->type);
+        $initiate_retrieval->is_migration = true;
         $result = $initiate_retrieval->getInitiateToken();
         $initiate_errors = $initiate_retrieval->getErrors();
         if (count($initiate_errors) > 0) {
